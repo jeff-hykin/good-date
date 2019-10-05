@@ -32,7 +32,7 @@ module.exports = class DateTime extends Date {
             aDate = new Date()
         } else if (args.length > 1) {
             let [year, month, ...other] = args
-            aDate = new Date(year, month+1, ...other)
+            aDate = new Date(year, month-1, ...other)
         } else {
             aDate = new Date(date)
         }
