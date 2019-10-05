@@ -1,4 +1,21 @@
-let inspectSymbol = (require && require('util').inspect.custom) || Symbol.for("inspect")
+const convertTime12to24 = (hours, pmOrAm) => {
+    if (hours == "12") {
+        hours = "00"
+    }
+    if (pmOrAm.match(/[pP][mM]/)) {
+        hours = parseInt(hours, 10) + 12
+    }
+    return hours
+}
+const padZero = (amount) => {
+    if (amount < 10) {
+        return `0${amount}`
+    } else {
+        return amount
+    }
+}
+
+const inspectSymbol = (require && require('util').inspect.custom) || Symbol.for('inspect')
 module.exports = class DateTime extends Date {
     constructor(...args) {
         var date, time
@@ -10,7 +27,15 @@ module.exports = class DateTime extends Date {
         } else if (args[0] instanceof Object) {
             var {date, time}  = args[0]
         }
-        let aDate = new Date(date)
+        let aDate
+        if (args.length == 0) {
+            aDate = new Date()
+        } else if (args.length > 1) {
+            let [year, month, ...other] = args
+            aDate = new Date(year, month+1, ...other)
+        } else {
+            aDate = new Date(date)
+        }
         super(aDate.getTime() + Math.abs(aDate.getTimezoneOffset()*60000))
         if (time) {
             this.time = time
@@ -35,7 +60,14 @@ module.exports = class DateTime extends Date {
         if (this.isInvalid) {return null}
         return (super.getMinutes() - this.utcOffset / 60000) % 60
     }
-    get hour() {
+    get hour12() {
+        if (this.isInvalid) {return null}
+        return ((this.hour24 + 11) % 12 + 1)
+    }
+    get amPm() {
+        return (this.hour24 >= 12)? 'pm' : 'am'
+    }
+    get hour24() {
         if (this.isInvalid) {return null}
         return super.getHours() - this.utcOffset / 3600000
     }
@@ -68,13 +100,11 @@ module.exports = class DateTime extends Date {
         if (this.isInvalid) {return null}
         let suffix, hours = this.hour, minutes = this.minute
         // it is pm if hours from 12 onwards
-        suffix = (hours >= 12)? 'pm' : 'am'
-        hours = ((hours + 11) % 12 + 1)
-        return `${padZero(hours)}:${padZero(minutes)}${suffix}`
+        return `${padZero(this.hour12)}:${padZero(minutes)}${this.amPm}`
     }
     get time24() {
         if (this.isInvalid) {return null}
-        return `${padZero(this.hour)}:${padZero(this.minute)}`
+        return `${padZero(this.hour24)}:${padZero(this.minute)}`
     }
     get unix() {
         if (this.isInvalid) {return null}
