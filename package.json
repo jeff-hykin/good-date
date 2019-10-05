@@ -1,20 +1,20 @@
 {
-  "name": "good-date",
-  "version": "1.1.0",
-  "description": "A Javascript date class that makes sense",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jeff-hykin/good-date.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jeff-hykin/good-date/issues"
-  },
-  "homepage": "https://github.com/jeff-hykin/good-date#readme"
+    "name": "good-date",
+    "version": "1.1.0",
+    "description": "A Javascript date class that makes sense",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jeff-hykin/good-date.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jeff-hykin/good-date/issues"
+    },
+    "homepage": "https://github.com/jeff-hykin/good-date#readme"
 }
