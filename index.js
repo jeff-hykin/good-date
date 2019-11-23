@@ -69,8 +69,6 @@ module.exports = class DateTime extends Date {
                 this.timeIncluded = true
             } else if (arg instanceof Array) {
                 super(...createDateArguments(...arg))
-                console.log(`arg is:`,arg)
-                console.log(`createDateArguments(...arg) is:`,createDateArguments(...arg))
                 if (arg.length > 3) {
                     this.timeIncluded = true
                 }
