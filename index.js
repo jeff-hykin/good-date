@@ -37,6 +37,15 @@ const createDateArguments = (...args) => {
         case 3:
             return [ isPositiveInt(year,'year'), isPositiveInt(month,'month')-1, isPositiveInt(day,'day') ]
             break;
+        case 4:
+            return [ isPositiveInt(year,'year'), isPositiveInt(month,'month')-1, isPositiveInt(day,'day'), hour ]
+            break;
+        case 5:
+            return [ isPositiveInt(year,'year'), isPositiveInt(month,'month')-1, isPositiveInt(day,'day'), hour, minute ]
+            break;
+        case 6:
+            return [ isPositiveInt(year,'year'), isPositiveInt(month,'month')-1, isPositiveInt(day,'day'), hour, minute, second ]
+            break;
         default:
             return [ isPositiveInt(year,'year'), isPositiveInt(month,'month')-1, isPositiveInt(day,'day'), hour, minute, second, milisecond ]
             break;
@@ -60,6 +69,8 @@ module.exports = class DateTime extends Date {
                 this.timeIncluded = true
             } else if (arg instanceof Array) {
                 super(...createDateArguments(...arg))
+                console.log(`arg is:`,arg)
+                console.log(`createDateArguments(...arg) is:`,createDateArguments(...arg))
                 if (arg.length > 3) {
                     this.timeIncluded = true
                 }
