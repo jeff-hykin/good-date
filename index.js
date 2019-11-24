@@ -5,7 +5,7 @@ const convertTime12to24 = (hours, pmOrAm) => {
     if (pmOrAm.match(/[pP][mM]/)) {
         hours = parseInt(hours, 10) + 12
     }
-    return hours
+    return hours-0
 }
 const padZero = (amount) => {
     if (amount < 10) {
