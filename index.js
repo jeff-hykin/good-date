@@ -196,7 +196,7 @@ module.exports = class DateTime extends Date {
     }
     get timeOfDayAsSeconds() {
         if (this.isInvalid) {return null}
-        return (((time.hour24*60) + time.minute)*60 + time.second)
+        return (((this.hour24*60) + this.minute)*60 + this.second)
     }
     get day() {
         if (this.isInvalid) {return null}
