@@ -175,9 +175,8 @@ module.exports = class DateTime extends Date {
     }
     get time12() {
         if (this.isInvalid) {return null}
-        let suffix, hours = this.hour, minutes = this.minute
         // it is pm if hours from 12 onwards
-        return `${padZero(this.hour12)}:${padZero(minutes)}${this.amPm}`
+        return `${padZero(this.hour12)}:${padZero(this.minute)}${this.amPm}`
     }
     get time24() {
         if (this.isInvalid) {return null}
@@ -194,6 +193,10 @@ module.exports = class DateTime extends Date {
     get monthName() {
         if (this.isInvalid) {return null}
         return ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][super.getMonth()]
+    }
+    get timeOfDayAsSeconds() {
+        if (this.isInvalid) {return null}
+        return (((time.hour24*60) + time.minute)*60 + time.second)
     }
     get day() {
         if (this.isInvalid) {return null}
