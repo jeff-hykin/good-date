@@ -238,6 +238,9 @@ module.exports = class DateTime extends Date {
         }
         return date
     }
+    toArray() {
+        return [this.year, this.month, this.day, this.hour24, this.minute, this.second ]
+    }
     inspect()                  { return this.toString() }
     [inspectSymbol]()          { return this.toString() }
     valueOf()                  { return this.unix  }
