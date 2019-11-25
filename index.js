@@ -56,6 +56,7 @@ module.exports = class DateTime extends Date {
     constructor(...args) {
         // no argument
         if (args.length == 0) {
+            this.timeIncluded = true
             super()
         } else {
             let dateStringArgument
@@ -230,6 +231,9 @@ module.exports = class DateTime extends Date {
         if (this.isInvalid) {return null}
         return `${padZero(this.month)}/${padZero(this.day)}/${this.getFullYear()}`
     }
+    toArray() {
+        return [this.year, this.month, this.day, this.hour24, this.minute, this.second ]
+    }
     toString() {
         if (this.isInvalid) {return null}
         let date = this.date
@@ -237,9 +241,6 @@ module.exports = class DateTime extends Date {
             date = `${date}, ${this.time}`
         }
         return date
-    }
-    toArray() {
-        return [this.year, this.month, this.day, this.hour24, this.minute, this.second ]
     }
     inspect()                  { return this.toString() }
     [inspectSymbol]()          { return this.toString() }
