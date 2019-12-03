@@ -4,7 +4,7 @@
     "description": "A Javascript date class that makes sense",
     "main": "index.js",
     "scripts": {
-        "publish": "git add -A; git commit -m '-'; git pull && git push; npm version patch && npm publish"
+        "test": "echo no tests"
     },
     "repository": {
         "type": "git",
