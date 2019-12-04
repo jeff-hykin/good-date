@@ -4,5 +4,9 @@ system "_ build"
 previous_process_finished_successfully = $?.success?
 if previous_process_finished_successfully
     system "project sync"
-    system "npm version patch && npm publish"
+    if -"npm version patch"
+        puts "Publishing"
+        system "npm publish"
+        puts "Finished Publishing"
+    end
 end
