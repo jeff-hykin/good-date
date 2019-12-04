@@ -1,6 +1,6 @@
 {
     "name": "good-date",
-    "version": "1.3.7",
+    "version": "1.3.9",
     "description": "A Javascript date class that makes sense",
     "main": "index.js",
     "scripts": {

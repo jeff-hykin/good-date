@@ -140,6 +140,7 @@ module.exports = class DateTime extends Date {
         return super.toLocaleTimeString().match(/(\d+):(\d+):(\d+) ([AP]M)/)[1]-0
     }
     get amPm() {
+        if (this.isInvalid) {return null}
         return (this.hour24 >= 12)? 'pm' : 'am'
     }
     get hour24() {
@@ -148,6 +149,7 @@ module.exports = class DateTime extends Date {
         return convertTime12to24(match[1], match[4])
     }
     get time() {
+        if (this.isInvalid) {return null}
         return this.time12
     }
     set time(time) {
@@ -187,6 +189,9 @@ module.exports = class DateTime extends Date {
         if (this.isInvalid) {return null}
         return super.getTime()
     }
+    set unix(value) {
+        return super.setTime(value)
+    }
     get month() {
         if (this.isInvalid) {return null}
         return super.toLocaleDateString().match(/(\d+)\/\d+\/\d+/)[1]-0
@@ -204,6 +209,7 @@ module.exports = class DateTime extends Date {
         return super.toLocaleDateString().match(/\d+\/(\d+)\/\d+/)[1]-0
     }
     get dayName() {
+        if (this.isInvalid) {return null}
         return this.weekDay
     }
     get weekDay() {
@@ -221,6 +227,7 @@ module.exports = class DateTime extends Date {
         return weekDay
     }
     get weekIndex() {
+        if (this.isInvalid) {return null}
         return super.getDay()
     }
     get year() {
@@ -232,6 +239,7 @@ module.exports = class DateTime extends Date {
         return `${padZero(this.month)}/${padZero(this.day)}/${this.getFullYear()}`
     }
     toArray() {
+        if (this.isInvalid) {return null}
         return [this.year, this.month, this.day, this.hour24, this.minute, this.second ]
     }
     toString() {
