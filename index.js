@@ -1,12 +1,3 @@
-const convertTime12to24 = (hours, pmOrAm) => {
-    if (hours == "12") {
-        hours = "00"
-    }
-    if (pmOrAm.match(/[pP][mM]/)) {
-        hours = parseInt(hours, 10) + 12
-    }
-    return hours-0
-}
 const padZero = (amount) => {
     if (amount < 10) {
         return `0${amount-0}`
@@ -23,6 +14,7 @@ const isPositiveInt = (value, name) => {
         return value
     }
 }
+
 const createDateArguments = (...args) => {
     let [year, month, day, hour, minute, second, milisecond] = args
     switch (args.length) {
@@ -51,8 +43,17 @@ const createDateArguments = (...args) => {
             break;
     }
 }
+
 const inspectSymbol = (require && require('util').inspect.custom) || Symbol.for('inspect')
-module.exports = class DateTime extends Date {
+
+class DateTimeError extends Error {
+    constructor(message) {
+        super()
+        this.message = message
+    }
+}
+
+class DateTime extends Date {
     constructor(...args) {
         // no argument
         if (args.length == 0) {
@@ -110,7 +111,7 @@ module.exports = class DateTime extends Date {
                     years       = format1[3]
                     super(...createDateArguments(years, months, days))
                 } else {
-                    throw Error(`Invalid Date format: ${arg}, please use one of: \n    12/31/1999\n    2011-09-24\n    2011-09-24T00:00:00\n    2011-09-24T00:00:00Z`)
+                    throw new DateTimeError(`Invalid Date format: ${arg}, please use one of: \n    12/31/1999\n    2011-09-24\n    2011-09-24T00:00:00\n    2011-09-24T00:00:00Z`)
                 }
             }
         }
@@ -127,9 +128,13 @@ module.exports = class DateTime extends Date {
         if (this.isInvalid) {return null}
         return Math.abs(this.getTimezoneOffset()*60000)
     }
+    get millisecond() {
+        if (this.isInvalid) {return null}
+        return super.getMilliseconds()
+    }
     get second() {
         if (this.isInvalid) {return null}
-        return super.getSeconds() + super.getMilliseconds()/1000
+        return super.getSeconds()
     }
     get minute() {
         if (this.isInvalid) {return null}
@@ -146,35 +151,18 @@ module.exports = class DateTime extends Date {
     get hour24() {
         if (this.isInvalid) {return null}
         let match = super.toLocaleTimeString().match(/(\d+):(\d+):(\d+) ([AP]M)/)
-        return convertTime12to24(match[1], match[4])
+        return DateTime.convertTime12to24(match[1], match[4])
     }
     get time() {
         if (this.isInvalid) {return null}
         return this.time12
     }
     set time(time) {
+        let [hour, minute, second, milisecond] = DateTime.uncheckedParseTimeString(time)
+        // ensure valid numbers for: hour, minute, seconds, miliseconds
+        DateTime.ensureValidTime([hour, minute, seconds, miliseconds])
+        super.setHours(hour, minute, seconds, miliseconds)
         this.timeIncluded = true
-        let match = time.match(/(\d+):(\d+)(.*)/)
-        if (match) {
-            let hour = match[1]
-            let minute = match[2]
-            let seconds = null
-            let miliseconds = 0
-            let everythingElse = match[3]
-            // check for seconds
-            let checkForSeconds = everythingElse.match(/:(\d+)(?:\.(\d+))?(.*)/)
-            if (checkForSeconds) {
-                seconds = checkForSeconds[1]-0
-                checkForSeconds[2] && (miliseconds = checkForSeconds[2])
-                everythingElse = checkForSeconds[3]
-            }
-            // check for am/pm
-            let modifierMatch = everythingElse.trim().match(/((?:[aA]|[pP])[mM])/)
-            if (modifierMatch) {
-                hour = convertTime12to24(hour, modifierMatch[1])
-            }
-            super.setHours(hour, minute, seconds, miliseconds)
-        }
     }
     get time12() {
         if (this.isInvalid) {return null}
@@ -256,3 +244,86 @@ module.exports = class DateTime extends Date {
     toPrimitive()              { return this.unix  }
     [Symbol.toPrimitive](hint) { return this.unix  }
 }
+
+DateTime.uncheckedParseTimeString = (string) => {
+    let match = time.match(/(\d+):(\d+)(.*)/)
+    if (match) {
+        let hour = match[1]
+        let minute = match[2]
+        let second = 0
+        let milisecond = 0
+        let everythingElse = match[3]
+        // check for seconds
+        let checkForSeconds = everythingElse.match(/:(\d+)(?:\.(\d+))?(.*)/)
+        if (checkForSeconds) {
+            second = checkForSeconds[1]
+            checkForSeconds[2] && (milisecond = checkForSeconds[2])
+            everythingElse = checkForSeconds[3]
+        }
+        // check for am/pm
+        let modifierMatch = everythingElse.trim().match(/((?:[aA]|[pP])[mM])/)
+        if (modifierMatch) {
+            hour = convertTime12to24(hour, modifierMatch[1])
+        }
+        // ensure valid numbers for: hour, minute, seconds, miliseconds
+        // convert all to numbers
+        hour -= 0
+        minute -= 0
+        second -= 0
+        milisecond -= 0
+        return [hour, minute, second, milisecond]
+    }
+    return null
+}
+
+DateTime.ensureValidTime = (input) => {
+    let timeArray
+    if (typeof input == 'string') {
+        timeArray = DateTime.uncheckedParseTimeString(input)
+    } else if (input instanceof Array) {
+        timeArray = input
+    } else {
+        throw Error(`Invalid argument for DateTime.ensureValidTime() argument should be a string or an array. Instead it was ${JSON.stringify(input)}`)
+    }
+    
+    let [hour, minute, second, milisecond] = input
+    hour -= 0
+    minute -= 0
+    second -= 0
+    milisecond -= 0
+    
+    if (hour != hour || hour < 0 || hour > 23) {
+        throw new DateTimeError(`invalid hour: ${hour}`)
+    } else if (minute != minute || minute < 0 || minute > 59) {
+        throw new DateTimeError(`invalid minute: ${minute}`)
+    } else if (second != second || second < 0 || second > 59) {
+        throw new DateTimeError(`invalid second: ${second}`)
+    } else if (milisecond != milisecond || milisecond < 0 || milisecond > 999) {
+        throw new DateTimeError(`invalid miliseconds: ${milisecond}`)
+    }
+}
+
+DateTime.isValidTime = (input) => {
+    try {
+        DateTime.ensureValidTime(input)
+        return true
+    } catch (error) {
+        return false
+    }
+}
+
+DateTime.convertTime12to24 = (hours, pmOrAm) => {
+    if (hours == "12") {
+        hours = "00"
+    }
+    if (pmOrAm.match(/[pP][mM]/)) {
+        hours = parseInt(hours, 10) + 12
+    }
+    return hours-0
+}
+
+DateTime.now = () => {
+    return new DateTime()
+}
+
+module.exports = DateTime
