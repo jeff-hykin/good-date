@@ -32,6 +32,6 @@ aDate.dayName   // Friday
 aDate.weekIndex // 5
 aDate.unix      // milliseconds since the unix epoch
 
-// an invalid dates throw errors instead of failing silently
+// an invalid date throw errors instead of failing silently
 let aDate = new DateTime('Blah')
 ```
