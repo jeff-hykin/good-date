@@ -57,8 +57,8 @@ class DateTime extends Date {
     constructor(...args) {
         // no argument
         if (args.length == 0) {
-            this.timeIncluded = true
             super()
+            this.timeIncluded = true
         } else {
             let dateStringArgument
             let arg = args[0]
