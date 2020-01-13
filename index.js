@@ -118,10 +118,10 @@ class DateTime extends Date {
     }
     add({days=0, hours=0, minutes=0, seconds=0, miliseconds=0}) {
         // TODO: add year, and month in future
-        miliseconds += second * 1000
-        miliseconds += minute * 1000 * 60
-        miliseconds += hour   * 1000 * 60 * 60
-        miliseconds += day    * 1000 * 60 * 60 * 24
+        miliseconds += seconds * 1000
+        miliseconds += minutes * 1000 * 60
+        miliseconds += hours   * 1000 * 60 * 60
+        miliseconds += days    * 1000 * 60 * 60 * 24
         this.unix = this.unix + miliseconds
         return this
     }
