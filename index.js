@@ -118,7 +118,6 @@ class DateTime extends Date {
     }
     add({days=0, hours=0, minutes=0, seconds=0, miliseconds=0}) {
         // TODO: add year, and month in future
-        let miliseconds = milisecond
         miliseconds += second * 1000
         miliseconds += minute * 1000 * 60
         miliseconds += hour   * 1000 * 60 * 60
