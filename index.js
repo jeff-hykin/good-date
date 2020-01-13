@@ -67,7 +67,7 @@ class DateTime extends Date {
             }
             // assume unix epoch time
             if (typeof arg == 'number') {
-                super(isPositiveInt(arg,'DateTime(arg'))
+                super(isPositiveInt(arg,'DateTime(arg)'))
                 this.timeIncluded = true
             } else if (arg instanceof Array) {
                 super(...createDateArguments(...arg))
@@ -115,6 +115,15 @@ class DateTime extends Date {
                 }
             }
         }
+    }
+    add({days=0, hours=0, minutes=0, seconds=0, miliseconds=0}) {
+        // TODO: add year, and month in future
+        let miliseconds = milisecond
+        miliseconds += second * 1000
+        miliseconds += minute * 1000 * 60
+        miliseconds += hour   * 1000 * 60 * 60
+        miliseconds += day    * 1000 * 60 * 60 * 24
+        this.unix = this.unix + miliseconds
     }
     get isInvalid() {
         let time = this.getTime()
