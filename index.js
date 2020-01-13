@@ -124,6 +124,7 @@ class DateTime extends Date {
         miliseconds += hour   * 1000 * 60 * 60
         miliseconds += day    * 1000 * 60 * 60 * 24
         this.unix = this.unix + miliseconds
+        return this
     }
     get isInvalid() {
         let time = this.getTime()
