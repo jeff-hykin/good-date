@@ -169,8 +169,8 @@ class DateTime extends Date {
     set time(time) {
         let [hour, minute, second, milisecond] = DateTime.uncheckedParseTimeString(time)
         // ensure valid numbers for: hour, minute, seconds, miliseconds
-        DateTime.ensureValidTime([hour, minute, seconds, miliseconds])
-        super.setHours(hour, minute, seconds, miliseconds)
+        DateTime.ensureValidTime([hour, minute, second, milisecond])
+        super.setHours(hour, minute, second, milisecond)
         this.timeIncluded = true
     }
     get time12() {
@@ -254,7 +254,7 @@ class DateTime extends Date {
     [Symbol.toPrimitive](hint) { return this.unix  }
 }
 
-DateTime.uncheckedParseTimeString = (string) => {
+DateTime.uncheckedParseTimeString = (time) => {
     let match = time.match(/(\d+):(\d+)(.*)/)
     if (match) {
         let hour = match[1]
@@ -272,7 +272,7 @@ DateTime.uncheckedParseTimeString = (string) => {
         // check for am/pm
         let modifierMatch = everythingElse.trim().match(/((?:[aA]|[pP])[mM])/)
         if (modifierMatch) {
-            hour = convertTime12to24(hour, modifierMatch[1])
+            hour = DateTime.convertTime12to24(hour, modifierMatch[1])
         }
         // ensure valid numbers for: hour, minute, seconds, miliseconds
         // convert all to numbers
