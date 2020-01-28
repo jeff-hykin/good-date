@@ -4,13 +4,17 @@
     description: A class that works how the Javascript Date class should work
     
     todo:
+        - add set date
+        - add countdowns:
+            - secondsUntil()
+            - milliSecondsUntil()
+            - etc
         - add unit tests before publishing
         - documentation:
             - add JSDOC stuff
                 /**
                 * @param {String} input a time format such as 12:00am or 23:00 or 23:00:02
                 */
-        - add set date
         - add durations:
             - classes:
                 - years
