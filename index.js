@@ -237,7 +237,7 @@ class DateTime extends Date {
     }
     toArray() {
         if (this.isInvalid) {return null}
-        return [this.year, this.month, this.day, this.hour24, this.minute, this.second ]
+        return [this.year, this.month, this.day, this.hour24, this.minute, this.second, this.millisecond ]
     }
     toString() {
         if (this.isInvalid) {return null}
