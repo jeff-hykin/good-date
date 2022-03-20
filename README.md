@@ -20,7 +20,7 @@ aDate.time = '1:30pm'
 aDate.time = '1:30:20pm'
 aDate.time = '1:30:20.5'
 aDate.time = '1:30:20.5am'
-aDate.seconds // 20.5
+aDate.second  // 20
 aDate.minute  // 30
 aDate.amPm    // pm
 aDate.hour12  // 1
