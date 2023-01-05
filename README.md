@@ -3,7 +3,7 @@
 A Javascript date class that actually makes sense
 
 ```javascript
-let DateTime = require('good-date')
+import DateTime from 'https://cdn.skypack.dev/good-date'
 
 // a valid date with no time
 let aDate = new DateTime('12/31/1999')
